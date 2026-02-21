@@ -20,11 +20,12 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        await new Promise(r => setTimeout(r, 800));
-        const result = register(form);
+        const result = await register(form);
         if (result.success) {
             toast.success('Account created! Welcome to DocSpot 🎉');
             navigate(`/${result.user.role}`);
+        } else {
+            toast.error(result.error || 'Registration failed.');
         }
         setLoading(false);
     };
@@ -82,7 +83,7 @@ export default function Register() {
                         </div>
                         <div className="form-group">
                             <label className="form-label">Password</label>
-                            <input className="form-input" type="password" placeholder="Min 8 characters" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} required minLength={6} />
+                            <input className="form-input" type="password" placeholder="Min 6 characters" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} required minLength={6} />
                         </div>
                         <div className="form-group">
                             <label className="form-label">Preferred Language</label>

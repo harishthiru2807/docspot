@@ -69,26 +69,31 @@ export default function Sidebar() {
 
             {/* Role Badge */}
             <div style={{ padding: '0 16px 16px' }}>
-                <div className="card" style={{
-                    padding: '14px',
-                    background: `rgba(${roleColor === 'var(--color-patient)' ? '14,165,233' : roleColor === 'var(--color-doctor)' ? '99,102,241' : roleColor === 'var(--color-nurse)' ? '16,185,129' : '245,158,11'},0.08)`,
-                    border: `1px solid rgba(${roleColor === 'var(--color-patient)' ? '14,165,233' : roleColor === 'var(--color-doctor)' ? '99,102,241' : roleColor === 'var(--color-nurse)' ? '16,185,129' : '245,158,11'},0.2)`,
+                <div style={{
+                    padding: '16px',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-md)',
+                    boxShadow: 'var(--shadow-sm)',
                 }}>
                     <div className="flex items-center gap-3">
                         <div className="avatar" style={{
-                            background: `rgba(${roleColor === 'var(--color-patient)' ? '14,165,233' : roleColor === 'var(--color-doctor)' ? '99,102,241' : roleColor === 'var(--color-nurse)' ? '16,185,129' : '245,158,11'},0.2)`,
+                            background: `${roleColor}10`,
                             color: roleColor,
-                            border: `2px solid ${roleColor}40`,
-                            width: 42, height: 42, fontSize: 16,
+                            border: `2px solid ${roleColor}25`,
+                            width: 44, height: 44, fontSize: 18,
+                            borderRadius: '50%',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center'
                         }}>
-                            {user?.avatar}
+                            {user?.avatar || roleIcons[user?.role]}
                         </div>
                         <div style={{ overflow: 'hidden' }}>
                             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {user?.name}
                             </div>
-                            <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
-                                {roleIcons[user?.role]} {user?.role}
+                            <div style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'capitalize', display: 'flex', alignItems: 'center', gap: 4 }}>
+                                <span style={{ width: 6, height: 6, borderRadius: '50%', background: roleColor }} />
+                                {user?.role}
                             </div>
                         </div>
                     </div>
@@ -97,7 +102,7 @@ export default function Sidebar() {
 
             {/* Nav Items */}
             <nav className="sidebar-nav">
-                <div className="sidebar-section-label">Navigation</div>
+                <div className="sidebar-section-label">Main Menu</div>
                 {navItems.map((item) => {
                     const isActive = location.pathname === item.path;
                     return (
@@ -105,8 +110,13 @@ export default function Sidebar() {
                             key={item.path}
                             className={`sidebar-nav-link ${isActive ? 'active' : ''}`}
                             onClick={() => navigate(item.path)}
+                            style={{
+                                background: isActive ? 'rgba(37, 99, 235, 0.05)' : 'transparent',
+                                color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                                fontWeight: isActive ? 600 : 400
+                            }}
                         >
-                            <item.icon size={18} />
+                            <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
                             {item.label}
                         </div>
                     );
@@ -117,26 +127,34 @@ export default function Sidebar() {
             <div className="sidebar-footer">
                 {/* Online Status */}
                 <div style={{ marginBottom: 12 }}>
-                    <div className={`status-bar ${isOnline ? 'status-online' : 'status-offline'}`}>
-                        <div className={`status-dot ${isOnline ? 'status-dot-online' : 'status-dot-offline'}`} />
-                        {isOnline ? 'Online' : 'Offline Mode'}
+                    <div className={`status-bar ${isOnline ? 'status-online' : 'status-offline'}`} style={{
+                        background: isOnline ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)',
+                        border: `1px solid ${isOnline ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'}`,
+                        color: isOnline ? 'var(--accent)' : 'var(--danger)',
+                        fontSize: 11, fontWeight: 600
+                    }}>
+                        <div className={`status-dot ${isOnline ? 'status-dot-online' : 'status-dot-offline'}`}
+                            style={{ background: isOnline ? 'var(--accent)' : 'var(--danger)' }} />
+                        {isOnline ? 'System Online' : 'Offline Mode'}
                         {pendingSync > 0 && (
-                            <span style={{ display: 'flex', alignItems: 'center', gap: 3, marginLeft: 'auto', color: '#fbbf24' }}>
-                                <RefreshCw size={11} />
-                                {pendingSync} pending
+                            <span style={{ display: 'flex', alignItems: 'center', gap: 3, marginLeft: 'auto', color: 'var(--accent-warm)' }}>
+                                <RefreshCw size={11} className="animate-spin" />
+                                {pendingSync}
                             </span>
                         )}
                     </div>
                 </div>
 
                 {user?.patientId && (
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, paddingLeft: 4 }}>
-                        ID: {user.patientId}
+                    <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 8, paddingLeft: 4, letterSpacing: '0.02em' }}>
+                        PATIENT ID: {user.patientId}
                     </div>
                 )}
 
-                <div className="sidebar-nav-link" onClick={handleLogout} style={{ color: 'var(--danger)', marginTop: 4 }}>
-                    <LogOut size={18} />
+                <div className="sidebar-nav-link" onClick={handleLogout} style={{ color: 'var(--text-muted)', marginTop: 4, fontSize: 13 }}
+                    onMouseEnter={e => e.target.style.color = 'var(--danger)'}
+                    onMouseLeave={e => e.target.style.color = 'var(--text-muted)'}>
+                    <LogOut size={16} />
                     Sign Out
                 </div>
             </div>

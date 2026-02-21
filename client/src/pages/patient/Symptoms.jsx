@@ -13,8 +13,8 @@ const TYPING_DELAY = 1200;
 function TypingIndicator() {
     return (
         <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end', marginBottom: 18 }}>
-            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, boxShadow: '0 4px 12px rgba(99,102,241,0.4)' }}>🩺</div>
-            <div style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '18px 18px 18px 4px', padding: '14px 18px', display: 'flex', gap: 6, alignItems: 'center' }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--grad-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, boxShadow: 'var(--shadow-sm)' }}>🩺</div>
+            <div style={{ background: 'var(--bg-card-hover)', border: '1px solid var(--border)', borderRadius: '18px 18px 18px 4px', padding: '14px 18px', display: 'flex', gap: 6, alignItems: 'center' }}>
                 {[0, 1, 2].map(i => (
                     <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--primary)', animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
                 ))}
@@ -28,18 +28,19 @@ function Message({ msg, lang }) {
     return (
         <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end', marginBottom: 18, flexDirection: isDoctor ? 'row' : 'row-reverse' }}>
             {isDoctor && (
-                <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, boxShadow: '0 4px 12px rgba(99,102,241,0.4)' }}>🩺</div>
+                <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--grad-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, boxShadow: 'var(--shadow-sm)' }}>🩺</div>
             )}
             <div style={{ maxWidth: '78%' }}>
                 {isDoctor && <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4, marginLeft: 4 }}>Dr. ARIA • {msg.time}</div>}
                 <div style={{
-                    background: isDoctor ? 'rgba(99,102,241,0.08)' : 'linear-gradient(135deg,var(--primary),var(--primary-dark,#4f46e5))',
-                    border: isDoctor ? '1px solid rgba(99,102,241,0.2)' : 'none',
+                    background: isDoctor ? 'var(--bg-surface)' : 'var(--grad-primary)',
+                    border: isDoctor ? '1px solid var(--border)' : 'none',
                     borderRadius: isDoctor ? '18px 18px 18px 4px' : '18px 18px 4px 18px',
                     padding: '14px 18px',
                     color: isDoctor ? 'var(--text-primary)' : '#fff',
                     fontSize: 14,
                     lineHeight: 1.7,
+                    boxShadow: 'var(--shadow-sm)',
                 }}>
                     <div className="ai-markdown">
                         <ReactMarkdown>{msg.text}</ReactMarkdown>
@@ -48,7 +49,7 @@ function Message({ msg, lang }) {
                 {msg.pills && msg.pills.length > 0 && (
                     <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                         {msg.pills.map(p => (
-                            <span key={p} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 20, padding: '4px 10px', color: '#34d399' }}>
+                            <span key={p} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, background: 'rgba(13, 148, 136, 0.08)', border: '1px solid rgba(13, 148, 136, 0.2)', borderRadius: 20, padding: '4px 10px', color: 'var(--secondary)' }}>
                                 <Pill size={10} /> {p}
                             </span>
                         ))}
@@ -59,9 +60,10 @@ function Message({ msg, lang }) {
                         <span style={{
                             display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11,
                             borderRadius: 20, padding: '4px 12px',
-                            background: msg.severity === 'emergency' ? 'rgba(239,68,68,0.15)' : msg.severity === 'moderate' ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)',
-                            color: msg.severity === 'emergency' ? '#f87171' : msg.severity === 'moderate' ? '#fbbf24' : '#34d399',
-                            border: `1px solid ${msg.severity === 'emergency' ? 'rgba(239,68,68,0.3)' : msg.severity === 'moderate' ? 'rgba(245,158,11,0.3)' : 'rgba(16,185,129,0.3)'}`,
+                            background: msg.severity === 'emergency' ? 'rgba(239,68,68,0.08)' : msg.severity === 'moderate' ? 'rgba(245,158,11,0.08)' : 'rgba(16,185,129,0.08)',
+                            color: msg.severity === 'emergency' ? 'var(--danger)' : msg.severity === 'moderate' ? 'var(--accent-warm)' : 'var(--accent)',
+                            border: `1px solid ${msg.severity === 'emergency' ? 'rgba(239,68,68,0.2)' : msg.severity === 'moderate' ? 'rgba(245,158,11,0.2)' : 'rgba(16,185,129,0.2)'}`,
+                            fontWeight: 600,
                         }}>
                             {msg.severity === 'emergency' ? '🚨 EMERGENCY' : msg.severity === 'moderate' ? '⚠️ MODERATE' : '✅ MILD'} — {msg.diagnosis}
                         </span>
@@ -136,7 +138,6 @@ export default function PatientSymptoms() {
                 addDoctorMsg(fups[followUpIndex]);
                 setFollowUpIndex(f => f + 1);
             } else {
-                // Deliver diagnosis
                 const diag = currentCondition.diagnosis[lang];
                 setStage(STAGES.DIAGNOSIS);
                 setDiagnosed(true);
@@ -149,14 +150,12 @@ export default function PatientSymptoms() {
                     diagnosis: diag.diagnosis,
                     pills: diag.medicines,
                 });
-                // Post-diagnosis follow-up
                 setTimeout(() => {
                     const post = POST_DIAGNOSIS[lang];
                     addDoctorMsg(post[Math.floor(Math.random() * post.length)]);
                 }, 2000);
             }
         } else if (stage === STAGES.DIAGNOSIS) {
-            // Continue conversation after diagnosis
             const lower = text.toLowerCase();
             if (lower.includes('video') || lower.includes('doctor') || lower.includes('consult') || lower.includes('ஆலோசனை') || lower.includes('மருத்துவர்')) {
                 addDoctorMsg(lang === 'en'
@@ -208,21 +207,21 @@ export default function PatientSymptoms() {
     return (
         <div className="dashboard-layout">
             <Sidebar />
-            <main className="main-content" style={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+            <main className="main-content" style={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', background: 'var(--bg-base)' }}>
                 {/* Header */}
-                <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border)', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+                <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ width: 46, height: 46, borderRadius: '50%', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, boxShadow: '0 4px 16px rgba(99,102,241,0.5)' }}>🩺</div>
+                        <div style={{ width: 46, height: 46, borderRadius: '50%', background: 'var(--grad-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, boxShadow: 'var(--shadow-sm)' }}>🩺</div>
                         <div>
-                            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 17 }}>Dr. ARIA <span style={{ fontSize: 11, fontWeight: 400, color: '#34d399', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 20, padding: '2px 8px', marginLeft: 6 }}>● Online</span></div>
-                            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>AI Medical Assistant • DocSpot Health</div>
+                            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 17, color: 'var(--text-primary)' }}>Dr. ARIA <span style={{ fontSize: 11, fontWeight: 400, color: 'var(--accent)', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 20, padding: '2px 8px', marginLeft: 6 }}>● Active</span></div>
+                            <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>AI Medical Assistant • DocSpot Health</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: 8 }}>
-                        <button className="btn btn-ghost btn-sm" onClick={switchLang} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <button className="btn btn-ghost btn-sm" onClick={switchLang} style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid var(--border)' }}>
                             <Globe size={14} /> {lang === 'en' ? 'தமிழ்' : 'English'}
                         </button>
-                        <button className="btn btn-ghost btn-sm" onClick={() => startConversation(lang)} title="Reset conversation">
+                        <button className="btn btn-ghost btn-sm" style={{ border: '1px solid var(--border)' }} onClick={() => startConversation(lang)} title="Reset conversation">
                             <RefreshCw size={14} />
                         </button>
                         <button className="btn btn-primary btn-sm" onClick={() => navigate('/patient/video')}>
@@ -234,57 +233,63 @@ export default function PatientSymptoms() {
                 {/* Diagnosis Banner */}
                 {diagnosed && lastDiag && (
                     <div style={{
-                        padding: '10px 24px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0,
-                        background: severity === 'emergency' ? 'rgba(239,68,68,0.12)' : severity === 'moderate' ? 'rgba(245,158,11,0.1)' : 'rgba(16,185,129,0.08)',
-                        borderBottom: `1px solid ${severity === 'emergency' ? 'rgba(239,68,68,0.3)' : severity === 'moderate' ? 'rgba(245,158,11,0.25)' : 'rgba(16,185,129,0.2)'}`,
+                        padding: '12px 24px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0,
+                        background: severity === 'emergency' ? 'var(--bg-surface)' : 'var(--bg-surface)',
+                        borderBottom: `2px solid ${severity === 'emergency' ? 'var(--danger)' : severity === 'moderate' ? 'var(--accent-warm)' : 'var(--accent)'}`,
+                        boxShadow: 'var(--shadow-sm)'
                     }}>
-                        {severity === 'emergency' ? <AlertTriangle size={16} color="#f87171" /> : <Pill size={16} color={severity === 'moderate' ? '#fbbf24' : '#34d399'} />}
-                        <span style={{ fontSize: 13, fontWeight: 600, color: severity === 'emergency' ? '#f87171' : severity === 'moderate' ? '#fbbf24' : '#34d399' }}>
-                            Assessment: {lastDiag.diagnosis}
+                        <div style={{
+                            width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: severity === 'emergency' ? 'rgba(239,68,68,0.08)' : severity === 'moderate' ? 'rgba(245,158,11,0.08)' : 'rgba(16,185,129,0.08)',
+                        }}>
+                            {severity === 'emergency' ? <AlertTriangle size={18} color="var(--danger)" /> : <Pill size={18} color={severity === 'moderate' ? 'var(--accent-warm)' : 'var(--accent)'} />}
+                        </div>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>
+                            Assessment: <span style={{ color: severity === 'emergency' ? 'var(--danger)' : severity === 'moderate' ? 'var(--accent-warm)' : 'var(--accent)' }}>{lastDiag.diagnosis}</span>
                         </span>
                         {severity === 'emergency' && (
                             <a href="tel:108" style={{ marginLeft: 'auto' }}>
-                                <button className="btn btn-danger btn-sm"><Phone size={13} /> Call 108</button>
+                                <button className="btn btn-danger btn-sm" style={{ boxShadow: 'var(--shadow-sm)' }}><Phone size={13} /> Call Emergency (108)</button>
                             </a>
                         )}
                         {severity === 'moderate' && (
-                            <button className="btn btn-outline btn-sm" style={{ marginLeft: 'auto' }} onClick={() => navigate('/patient/video')}>
-                                <Video size={13} /> Book Consult
+                            <button className="btn btn-outline btn-sm" style={{ marginLeft: 'auto', border: '1px solid var(--primary)', color: 'var(--primary)' }} onClick={() => navigate('/patient/video')}>
+                                <Video size={13} /> Professional Consultation
                             </button>
                         )}
                     </div>
                 )}
 
                 {/* Messages */}
-                <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
+                <div style={{ flex: 1, overflowY: 'auto', padding: '24px', background: 'var(--bg-base)' }}>
                     {messages.map(msg => <Message key={msg.id} msg={msg} lang={lang} />)}
                     {typing && <TypingIndicator />}
                     <div ref={messagesEndRef} />
                 </div>
 
                 {/* Quick Symptom Chips */}
-                <div style={{ padding: '8px 24px', borderTop: '1px solid var(--border)', display: 'flex', gap: 6, overflowX: 'auto', flexShrink: 0, background: 'var(--bg-card)' }}>
+                <div style={{ padding: '12px 24px', borderTop: '1px solid var(--border)', display: 'flex', gap: 8, overflowX: 'auto', flexShrink: 0, background: 'var(--bg-surface)' }}>
                     {(lang === 'en'
                         ? ['I have fever', 'Headache', 'Stomach ache', 'Chest pain', 'Cough & cold', 'Body pain', 'Skin rash', 'Breathless', 'Anxiety', 'Eye pain']
-                        : ['காய்ச்சல் உள்ளது', 'தலைவலி', 'வயிற்று வலி', 'மார்பு வலி', 'இருமல் சளி', 'உடல்வலி', 'தோல் தடிப்பு', 'சுவாசிக்க கஷ்டம்', 'மன அழுத்தம்', 'கண் வலி']
+                        : ['காய்ச்சல் உள்ளது', 'தலைவலி', 'வயிற்று வலி', 'மார்மு வலி', 'இருமல் சளி', 'உடல்வலி', 'தோல் தடிப்பு', 'சுவாசிக்க கஷ்டம்', 'மன அழுத்தம்', 'கண் வலி']
                     ).map(chip => (
                         <button key={chip} onClick={() => { setInput(chip); inputRef.current?.focus(); }}
-                            style={{ flexShrink: 0, padding: '5px 12px', borderRadius: 20, fontSize: 12, border: '1px solid var(--border)', background: 'rgba(255,255,255,0.04)', color: 'var(--text-secondary)', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
-                            onMouseEnter={e => { e.target.style.background = 'rgba(99,102,241,0.1)'; e.target.style.borderColor = 'rgba(99,102,241,0.4)'; e.target.style.color = 'var(--primary-light)'; }}
-                            onMouseLeave={e => { e.target.style.background = 'rgba(255,255,255,0.04)'; e.target.style.borderColor = 'var(--border)'; e.target.style.color = 'var(--text-secondary)'; }}>
+                            style={{ flexShrink: 0, padding: '7px 16px', borderRadius: 20, fontSize: 12, border: '1px solid var(--border)', background: 'var(--bg-base)', color: 'var(--text-secondary)', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s', fontWeight: 500 }}
+                            onMouseEnter={e => { e.target.style.background = 'rgba(37, 99, 235, 0.05)'; e.target.style.borderColor = 'var(--primary-light)'; e.target.style.color = 'var(--primary)'; }}
+                            onMouseLeave={e => { e.target.style.background = 'var(--bg-base)'; e.target.style.borderColor = 'var(--border)'; e.target.style.color = 'var(--text-secondary)'; }}>
                             {chip}
                         </button>
                     ))}
                 </div>
 
                 {/* Input */}
-                <div style={{ padding: '14px 24px', borderTop: '1px solid var(--border)', background: 'var(--bg-card)', display: 'flex', gap: 10, alignItems: 'flex-end', flexShrink: 0 }}>
+                <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border)', background: 'var(--bg-surface)', display: 'flex', gap: 12, alignItems: 'flex-end', flexShrink: 0 }}>
                     <textarea ref={inputRef} className="form-input" rows={1} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-                        placeholder={lang === 'en' ? 'Describe your symptoms... (Press Enter to send)' : 'உங்கள் அறிகுறிகளை விவரிக்கவும்... (Enter அழுத்தவும்)'}
-                        style={{ flex: 1, resize: 'none', borderRadius: 12, fontSize: 14, padding: '12px 16px', maxHeight: 120, overflowY: 'auto' }}
+                        placeholder={lang === 'en' ? 'Describe your symptoms... (Press Enter to send)' : 'உங்கள் அறிகுறிகளை விவரிக்கவும்...'}
+                        style={{ flex: 1, resize: 'none', borderRadius: 14, fontSize: 14, padding: '14px 18px', maxHeight: 120, overflowY: 'auto', background: 'var(--bg-base)', border: '1px solid var(--border)' }}
                     />
-                    <button className="btn btn-primary" onClick={handleSend} disabled={!input.trim()} style={{ padding: '12px 20px', borderRadius: 12, flexShrink: 0 }}>
-                        <Send size={18} />
+                    <button className="btn btn-primary" onClick={handleSend} disabled={!input.trim()} style={{ height: 48, width: 48, borderRadius: 14, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
+                        <Send size={20} />
                     </button>
                 </div>
             </main>

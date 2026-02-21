@@ -88,7 +88,7 @@ export default function Landing() {
                         🚀 Start Free Today
                     </button>
                     <button className="btn btn-outline btn-lg" onClick={() => navigate('/login')}>
-                        🩺 Demo Login
+                        🩺 Explore Portals
                     </button>
                 </div>
 

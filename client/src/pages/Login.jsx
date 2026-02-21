@@ -9,26 +9,20 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { login, DEMO_USERS } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        await new Promise(r => setTimeout(r, 600));
-        const result = login(email, password);
+        const result = await login(email, password);
         if (result.success) {
             toast.success(`Welcome back, ${result.user.name}!`);
             navigate(`/${result.user.role}`);
         } else {
-            toast.error('Invalid credentials. Try the demo accounts below.');
+            toast.error(result.error || 'Invalid credentials.');
         }
         setLoading(false);
-    };
-
-    const quickLogin = (demoUser) => {
-        setEmail(demoUser.email);
-        setPassword(demoUser.password);
     };
 
     return (
@@ -91,36 +85,6 @@ export default function Login() {
                             {loading ? <div className="spinner" style={{ width: 20, height: 20, borderWidth: 2 }} /> : <><LogIn size={18} /> Sign In</>}
                         </button>
                     </form>
-
-                    <div style={{ margin: '28px 0', display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-                        <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>DEMO ACCOUNTS</span>
-                        <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                        {[
-                            { role: 'Patient', email: 'patient@docspot.com', icon: '🏥', color: '#0ea5e9' },
-                            { role: 'Doctor', email: 'doctor@docspot.com', icon: '🩺', color: '#6366f1' },
-                            { role: 'Nurse', email: 'nurse@docspot.com', icon: '💉', color: '#10b981' },
-                            { role: 'Pharmacy', email: 'pharmacy@docspot.com', icon: '💊', color: '#f59e0b' },
-                        ].map(d => (
-                            <button key={d.role} onClick={() => quickLogin({ email: d.email, password: 'demo123' })}
-                                style={{
-                                    padding: '10px 12px', borderRadius: 10, border: `1px solid ${d.color}30`,
-                                    background: `${d.color}10`, color: d.color, fontWeight: 600, fontSize: 13,
-                                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.2s',
-                                }}
-                                onMouseEnter={e => e.currentTarget.style.background = `${d.color}20`}
-                                onMouseLeave={e => e.currentTarget.style.background = `${d.color}10`}
-                            >
-                                {d.icon} {d.role}
-                            </button>
-                        ))}
-                    </div>
-                    <p style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'center', marginTop: 10 }}>
-                        Click a role above to auto-fill, then press Sign In
-                    </p>
 
                     <p style={{ textAlign: 'center', fontSize: 14, color: 'var(--text-secondary)', marginTop: 28 }}>
                         New user? <Link to="/register" style={{ color: 'var(--primary-light)', fontWeight: 600 }}>Create Account →</Link>
