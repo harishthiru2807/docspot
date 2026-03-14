@@ -10,7 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'docspot_secret_key_2024';
 
-app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:5173'] }));
+const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:5173'];
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 // ── In-Memory Store (replace with PostgreSQL for production) ──

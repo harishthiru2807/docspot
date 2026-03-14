@@ -1,0 +1,39 @@
+DocSpot Project Report: Full Documentation
+==========================================
+
+1. Abstract
+-----------
+DocSpot is a decentralized, AI-driven healthcare platform designed to bridge the rural-urban medical divide. By integrating a bilingual (Tamil & English) AI Video Doctor, role-based clinical dashboards, and real-time inventory synchronization, DocSpot provides a seamless healthcare journey from symptom onset to medication fulfillment.
+
+2. Introduction
+---------------
+Healthcare accessibility in India is hampered by a significant shortage of specialists in rural areas and the presence of profound linguistic barriers in clinical communication. DocSpot introduces a multi-stakeholder platform that connects Patients, Doctors, Nurses, and Pharmacies through a single, synchronized API layer.
+
+3. Objectives
+-------------
+- Accessibility: Provide 24/7 AI medical guidance in Tamil/English.
+- Stakeholder Integration: Synchronize clinical data across all portals.
+- Trust: Humanize AI through a realistic digital human avatar (Dr. ARIA).
+- Data Digitization: Secure, QR-based digital health IDs.
+
+4. Technical Stack
+-----------------
+Frontend: React.js & Vite
+Backend: Node.js & Express
+Security: JWT (JSON Web Tokens)
+API Layer: Axios with Interceptors
+
+5. Functional Modules
+--------------------
+Patient Portal: AI Diagnosis, QR Profile, Live Vitals.
+Doctor Portal: Queue Management, Video Consultation, E-Prescription.
+Nurse Portal: Ward Oversight, Clinical Alerting.
+Pharmacy Portal: Stock Compliance, Fulfillment Queue.
+
+6. Innovation: AI Video Doctor (Dr. ARIA)
+---------------------------------------
+Uses a custom CSS lip-sync engine coordinated with the Web Speech API to provide a high-trust, natural interaction for preliminary diagnoses.
+
+7. Conclusion
+-------------
+DocSpot demonstrates how AI and modern web architecture can solve real-world healthcare accessibility problems by providing a scalable, futuristic model for national healthcare delivery.

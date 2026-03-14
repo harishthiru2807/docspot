@@ -233,28 +233,61 @@ export default function AIVideoDoctor() {
     const [currentCondition, setCurrentCondition] = useState(null);
     const [followUpIndex, setFollowUpIndex] = useState(0);
     const [supported, setSupported] = useState(true);
+    const [typedInput, setTypedInput] = useState('');
 
     const recognitionRef = useRef(null);
     const synthRef = useRef(window.speechSynthesis);
     const scrollRef = useRef(null);
 
     const getTime = () => new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    const getFirstName = () => user?.name ? user.name.split(' ')[0] : (lang === 'ta' ? 'நண்பரே' : 'friend');
 
     const speak = useCallback((text, onEnd) => {
         if (isMuted || !synthRef.current) { onEnd?.(); return; }
         synthRef.current.cancel();
+
         const plain = text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#{1,3} /g, '').replace(/\n/g, ' ');
-        const utter = new SpeechSynthesisUtterance(plain.substring(0, 600));
+        const utter = new SpeechSynthesisUtterance(plain.substring(0, 700));
+
+        // Use 'ta-IN' for Tamil, else default to 'en-IN'
         utter.lang = lang === 'ta' ? 'ta-IN' : 'en-IN';
-        utter.pitch = 1.05;
-        utter.rate = lang === 'ta' ? 0.87 : 0.95;
+        utter.pitch = 1.0;
+        utter.rate = lang === 'ta' ? 0.9 : 1.0;
         utter.volume = 1;
+
         const voices = synthRef.current.getVoices();
-        const preferred = voices.find(v => v.lang === utter.lang) || voices.find(v => v.lang.startsWith(lang === 'ta' ? 'ta' : 'en')) || voices[0];
-        if (preferred) utter.voice = preferred;
+        if (voices.length > 0) {
+            // Find specific Tamil voice, or any voice starting with 'ta'
+            let selectedVoice = voices.find(v => v.lang === 'ta-IN' || v.lang === 'ta_IN');
+            if (!selectedVoice && lang === 'ta') {
+                selectedVoice = voices.find(v => v.lang.startsWith('ta'));
+            }
+
+            // For English
+            if (!selectedVoice && lang === 'en') {
+                selectedVoice = voices.find(v => v.lang.startsWith('en'));
+            }
+
+            if (selectedVoice) {
+                utter.voice = selectedVoice;
+            } else if (lang === 'ta') {
+                console.warn('No Tamil voice found on this system.');
+                // Show a one-time toast if Tamil voice is missing
+                if (!window.hasNotifiedMissingTamilVoice) {
+                    toast.info('Tamil voice output is not installed on your system. Dr. ARIA will respond in text.');
+                    window.hasNotifiedMissingTamilVoice = true;
+                }
+            }
+        }
+
         utter.onstart = () => setIsTalking(true);
         utter.onend = () => { setIsTalking(false); onEnd?.(); };
-        utter.onerror = () => { setIsTalking(false); onEnd?.(); };
+        utter.onerror = (e) => {
+            console.error('Speech synthesis error:', e);
+            setIsTalking(false);
+            onEnd?.();
+        };
+
         synthRef.current.speak(utter);
     }, [isMuted, lang]);
 
@@ -290,6 +323,21 @@ export default function AIVideoDoctor() {
     const startListening = () => {
         const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRec) { setSupported(false); return; }
+
+        if (!navigator.onLine) {
+            toast.error('You are offline. Voice recognition requires internet.');
+            return;
+        }
+
+        // Clean up any existing instances first
+        if (recognitionRef.current) {
+            try {
+                recognitionRef.current.abort();
+            } catch (e) {
+                console.error('Error aborting previous recognition:', e);
+            }
+        }
+
         const rec = new SpeechRec();
         rec.lang = lang === 'ta' ? 'ta-IN' : 'en-IN';
         rec.continuous = false;
@@ -307,12 +355,32 @@ export default function AIVideoDoctor() {
         };
         rec.onerror = (e) => {
             setIsListening(false);
-            if (e.error === 'not-allowed') toast.error('Microphone access denied. Please allow mic permission.');
-            else if (e.error !== 'no-speech') toast.error('Voice error. Please try again.');
+            console.error('Speech recognition error:', e.error);
+
+            const errorMessages = {
+                'not-allowed': 'Microphone access denied. Please allow mic permission in your browser.',
+                'network': 'Network error. The browser cannot reach the voice processing server. Please check your internet or try a different browser (Chrome/Edge).',
+                'no-speech': null,
+                'audio-capture': 'No microphone was found. Check your hardware.',
+                'aborted': null,
+                'busy': 'Voice system is busy. Please wait a moment.'
+            };
+
+            const msg = errorMessages[e.error];
+            if (msg) toast.error(msg);
+            else if (e.error !== 'no-speech' && e.error !== 'aborted') {
+                toast.error(`Voice error (${e.error}). Please try again.`);
+            }
         };
         rec.onend = () => { setIsListening(false); setLiveText(''); };
         recognitionRef.current = rec;
-        rec.start();
+
+        try {
+            rec.start();
+        } catch (e) {
+            console.error('Error starting recognition:', e);
+            toast.error('Could not start voice recognition. Please refresh.');
+        }
     };
 
     const handleUserInput = (text) => {
@@ -321,53 +389,59 @@ export default function AIVideoDoctor() {
         setTranscript(t => [...t, { who: 'user', text, time: getTime() }]);
 
         setTimeout(() => {
-            if (stage === STAGES.CHIEF_COMPLAINT) {
-                const match = matchCondition(text);
-                if (match) {
-                    setCurrentCondition(match);
-                    setFollowUpIndex(1);
-                    setStage(STAGES.FOLLOW_UP);
-                    aiSay(match.followUps[lang][0]);
-                } else {
-                    aiSay(FALLBACK[lang](user?.name?.split(' ')[0]));
-                }
-            } else if (stage === STAGES.FOLLOW_UP && currentCondition) {
-                const fups = currentCondition.followUps[lang];
-                if (followUpIndex < fups.length) {
-                    aiSay(fups[followUpIndex]);
-                    setFollowUpIndex(f => f + 1);
-                } else {
-                    const diag = currentCondition.diagnosis[lang];
-                    setStage(STAGES.DIAGNOSIS);
-                    const prefix = lang === 'en'
-                        ? `Thank you, ${user?.name?.split(' ')[0] || 'friend'}. Based on my assessment: `
-                        : `நன்றி ${user?.name?.split(' ')[0] || ''}. என் மதிப்பீட்டின் படி: `;
-                    aiSay(prefix + diag.message, () => {
-                        setTimeout(() => aiSay(POST_DIAGNOSIS[lang][0]), 1000);
-                    });
-                }
-            } else if (stage === STAGES.DIAGNOSIS) {
-                const lower = text.toLowerCase();
-                if (lower.includes('yes') || lower.includes('ஆம்') || lower.includes('more') || lower.includes('வேறு')) {
-                    setStage(STAGES.CHIEF_COMPLAINT);
-                    setCurrentCondition(null);
-                    aiSay(lang === 'en' ? 'Of course! Please tell me about your other symptoms.' : 'நிச்சயமாக! மற்ற அறிகுறிகளை கூறுங்கள்.');
-                } else if (lower.includes('no') || lower.includes('இல்லை') || lower.includes('thank') || lower.includes('நன்றி')) {
-                    aiSay(lang === 'en'
-                        ? 'You are welcome! Take care and get well soon. Stay healthy!'
-                        : 'வரவேற்கிறேன்! ஆரோக்கியமாக இருங்கள்!',
-                        () => setTimeout(endSession, 2200));
-                } else {
+            try {
+                if (stage === STAGES.CHIEF_COMPLAINT) {
                     const match = matchCondition(text);
                     if (match) {
-                        setCurrentCondition(match); setFollowUpIndex(1); setStage(STAGES.FOLLOW_UP);
+                        setCurrentCondition(match);
+                        setFollowUpIndex(1);
+                        setStage(STAGES.FOLLOW_UP);
                         aiSay(match.followUps[lang][0]);
                     } else {
-                        aiSay(lang === 'en' ? 'I understand. Is there anything else you would like to know?' : 'புரிகிறது. வேறு ஏதாவது கேள்வி உள்ளதா?');
+                        aiSay(FALLBACK[lang](getFirstName()));
+                    }
+                } else if (stage === STAGES.FOLLOW_UP && currentCondition) {
+                    const fups = currentCondition.followUps[lang];
+                    if (followUpIndex < fups.length) {
+                        aiSay(fups[followUpIndex]);
+                        setFollowUpIndex(f => f + 1);
+                    } else {
+                        const diag = currentCondition.diagnosis[lang];
+                        setStage(STAGES.DIAGNOSIS);
+                        const prefix = lang === 'en'
+                            ? `Thank you, ${getFirstName()}. Based on my assessment: `
+                            : `நன்றி ${getFirstName()}. என் மதிப்பீட்டின் படி: `;
+                        aiSay(prefix + diag.message, () => {
+                            setTimeout(() => aiSay(POST_DIAGNOSIS[lang][0]), 1000);
+                        });
+                    }
+                } else if (stage === STAGES.DIAGNOSIS) {
+                    const lower = text.toLowerCase();
+                    if (lower.includes('yes') || lower.includes('ஆம்') || lower.includes('more') || lower.includes('வேறு')) {
+                        setStage(STAGES.CHIEF_COMPLAINT);
+                        setCurrentCondition(null);
+                        aiSay(lang === 'en' ? 'Of course! Please tell me about your other symptoms.' : 'நிச்சயமாக! மற்ற அறிகுறிகளை கூறுங்கள்.');
+                    } else if (lower.includes('no') || lower.includes('இல்லை') || lower.includes('thank') || lower.includes('நன்றி')) {
+                        aiSay(lang === 'en'
+                            ? 'You are welcome! Take care and get well soon. Stay healthy!'
+                            : 'வரவேற்கிறேன்! ஆரோக்கியமாக இருங்கள்!',
+                            () => setTimeout(endSession, 2200));
+                    } else {
+                        const match = matchCondition(text);
+                        if (match) {
+                            setCurrentCondition(match); setFollowUpIndex(1); setStage(STAGES.FOLLOW_UP);
+                            aiSay(match.followUps[lang][0]);
+                        } else {
+                            aiSay(lang === 'en' ? "I didn't quite get that. Do you have any other symptoms or questions?" : "மன்னிக்கவும், எனக்கு புரியவில்லை. உங்களுக்கு வேறு அறிகுறிகள் அல்லது கேள்விகள் உள்ளதா?");
+                        }
                     }
                 }
+            } catch (error) {
+                console.error('AI Logic Error:', error);
+                toast.error(lang === 'en' ? 'An error occurred. Please try again.' : 'மன்னிக்கவும், ஒரு பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.');
+                aiSay(lang === 'en' ? "I encountered a small error. Can you repeat that?" : "என்னிடம் ஒரு சிறிய பிழை ஏற்பட்டது. தயவுசெய்து மீண்டும் கூறவும்?");
             }
-        }, 500);
+        }, 400);
     };
 
     useEffect(() => {
@@ -453,7 +527,37 @@ export default function AIVideoDoctor() {
                                         🎤 "{liveText}"
                                     </div>
                                 )}
-                                <div style={{ display: 'flex', gap: 18, marginTop: 28, alignItems: 'center' }}>
+
+                                {/* Text Input Fallback */}
+                                <div style={{ marginTop: 28, width: '100%', display: 'flex', gap: 8 }}>
+                                    <input
+                                        type="text"
+                                        value={typedInput}
+                                        onChange={(e) => setTypedInput(e.target.value)}
+                                        onKeyPress={(e) => e.key === 'Enter' && (handleUserInput(typedInput), setTypedInput(''))}
+                                        placeholder="Or type your symptoms here..."
+                                        style={{
+                                            flex: 1,
+                                            padding: '12px 18px',
+                                            borderRadius: 24,
+                                            background: 'var(--bg-surface)',
+                                            border: '1.5px solid var(--border)',
+                                            fontSize: 14,
+                                            color: 'var(--text-primary)',
+                                            boxShadow: 'var(--shadow-sm)',
+                                        }}
+                                    />
+                                    <button
+                                        onClick={() => { handleUserInput(typedInput); setTypedInput(''); }}
+                                        disabled={!typedInput.trim()}
+                                        className="btn btn-primary"
+                                        style={{ width: 50, height: 50, borderRadius: '50%', padding: 0 }}
+                                    >
+                                        ➔
+                                    </button>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: 18, marginTop: 24, alignItems: 'center' }}>
                                     <button onClick={() => setIsMuted(m => !m)} style={{
                                         width: 50, height: 50, borderRadius: '50%',
                                         background: isMuted ? 'rgba(239, 68, 68, 0.08)' : 'var(--bg-surface)',
@@ -532,7 +636,7 @@ export default function AIVideoDoctor() {
                         )}
                     </div>
                 </div>
-            </main>
-        </div>
+            </main >
+        </div >
     );
 }

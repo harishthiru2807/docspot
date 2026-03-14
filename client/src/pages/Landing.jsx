@@ -74,8 +74,8 @@ export default function Landing() {
                     lineHeight: 1.05, marginBottom: 24, maxWidth: 900,
                 }}>
                     Healthcare for
-                    <span className="gradient-text"> Every Indian</span>
-                    {' '}Village
+                    <span className="gradient-text"> Every</span>
+                    {' '}Individuals
                 </h1>
                 <p className="animate-fade-up delay-2" style={{
                     fontSize: 'clamp(16px,2vw,20px)', color: 'var(--text-secondary)', maxWidth: 620, marginBottom: 40, lineHeight: 1.7

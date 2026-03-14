@@ -30,7 +30,11 @@ export const KB = [
     // FEVER
     {
         id: 'fever',
-        keywords: ['fever', 'temperature', 'hot', 'chills', 'shivering', 'sweating', 'feverish', 'காய்ச்சல்', 'வெப்பம்', 'நடுக்கம்', 'வியர்வை', 'சூடு'],
+        keywords: [
+            'fever', 'temperature', 'hot', 'chills', 'shivering', 'sweating', 'feverish', 'feeling hot',
+            'high temp', 'burning up', 'shaking', 'aches and pains',
+            'காய்ச்சல்', 'வெப்பம்', 'நடுக்கம்', 'வியர்வை', 'சூடு', 'உடல் சூடு', 'காய்ச்சலா இருக்கு'
+        ],
         followUps: {
             en: ["How long have you had the fever? Is it constant or does it come and go?", "Have you measured your temperature? What was it?", "Any other symptoms along with fever — headache, body ache, cough?"],
             ta: ["எத்தனை நாட்களாக காய்ச்சல் உள்ளது? தொடர்ந்து இருக்கிறதா அல்லது வந்து போகிறதா?", "காய்ச்சல் எவ்வளவு இருக்கிறது? (°F அல்லது °C)", "காய்ச்சலுடன் தலைவலி, உடல்வலி, இருமல் ஏதாவது உள்ளதா?"],
@@ -56,7 +60,11 @@ export const KB = [
     // HEADACHE
     {
         id: 'headache',
-        keywords: ['headache', 'head pain', 'migraine', 'head ache', 'throbbing head', 'தலைவலி', 'தலை வலி', 'மாயக்கிறை'],
+        keywords: [
+            'headache', 'head pain', 'migraine', 'head ache', 'throbbing head', 'head hurts',
+            'pain in head', 'sinus pain', 'heavy head', 'head pressure',
+            'தலைவலி', 'தலை வலி', 'மாயக்கிறை', 'தலை பாரமா இருக்கு', 'உச்சந்தலை வலி'
+        ],
         followUps: {
             en: ["Where exactly is the pain — front, back, sides, or whole head?", "Is it a throbbing pain, pressure, or sharp pain?", "Does the headache come with nausea, light sensitivity, or blurred vision?"],
             ta: ["வலி எங்கே இருக்கிறது — முன்பக்கம், பின்பக்கம், பக்கவாட்டில், அல்லது முழு தலையிலும்?", "துடிக்கும் வலியா, அழுத்தமா, அல்லது கூர்மையான வலியா?", "தலைவலியுடன் குமட்டல், வெளிச்சத்தில் அசௌகரியம், அல்லது மங்கிய பார்வை ஏதாவது உள்ளதா?"],
@@ -82,7 +90,11 @@ export const KB = [
     // CHEST PAIN
     {
         id: 'chest_pain',
-        keywords: ['chest pain', 'chest', 'heart', 'chest tight', 'breathless', 'chest pressure', 'மார்பு வலி', 'மார்பு', 'இதயம்', 'சுவாசிக்க'],
+        keywords: [
+            'chest pain', 'chest', 'heart', 'chest tight', 'breathless', 'chest pressure',
+            'heavy chest', 'pain in heart', 'difficulty breathing chest', 'angina',
+            'மார்பு வலி', 'மார்பு', 'இதயம்', 'சுவாசிக்க', 'மூச்சு திணறல்', 'இதய வலி'
+        ],
         followUps: {
             en: ["Is the pain sharp, crushing, or pressure-like?", "Does the pain spread to your arm, jaw, or back?", "Are you also short of breath or sweating?"],
             ta: ["வலி கூர்மையானதா, நசுக்குவது போல் உணர்கிறீர்களா?", "வலி கை, தாடை அல்லது முதுகிற்கு பரவுகிறதா?", "சுவாசிக்க கஷ்டமா இருக்கிறதா அல்லது வியர்க்கிறதா?"],
@@ -108,7 +120,11 @@ export const KB = [
     // COUGH
     {
         id: 'cough',
-        keywords: ['cough', 'cold', 'sore throat', 'phlegm', 'mucus', 'congestion', 'runny nose', 'sneezing', 'இருமல்', 'சளி', 'தொண்டை வலி', 'சீதட்டம்'],
+        keywords: [
+            'cough', 'cold', 'sore throat', 'phlegm', 'mucus', 'congestion', 'runny nose', 'sneezing',
+            'barking cough', 'dry cough', 'wet cough', 'throat irritation',
+            'இருமல்', 'சளி', 'தொண்டை வலி', 'சீதட்டம்', 'வரட்டு இருமல்', 'தொண்டை கரகரப்பு'
+        ],
         followUps: {
             en: ["Is it a dry cough or productive (with mucus/phlegm)?", "How long have you been coughing?", "Any fever, sore throat, or difficulty breathing along with it?"],
             ta: ["உலர்ந்த இருமலா அல்லது சளியுடன் இருக்கிறதா?", "எத்தனை நாட்களாக இருமுகிறீர்கள்?", "இருமலுடன் காய்ச்சல், தொண்டை வலி அல்லது சுவாசிக்க சிரமம் உள்ளதா?"],
@@ -134,7 +150,11 @@ export const KB = [
     // STOMACH PAIN
     {
         id: 'stomach',
-        keywords: ['stomach', 'abdomen', 'abdominal', 'belly', 'gastric', 'nausea', 'vomiting', 'diarrhea', 'loose motion', 'indigestion', 'acidity', 'வயிற்று வலி', 'வயிறு', 'குமட்டல்', 'வாந்தி', 'வயிற்றுப்போக்கு', 'அஜீரணம்'],
+        keywords: [
+            'stomach', 'abdomen', 'abdominal', 'belly', 'gastric', 'nausea', 'vomiting', 'diarrhea',
+            'loose motion', 'indigestion', 'acidity', 'stomach ache', 'cramps', 'bloating',
+            'வயிற்று வலி', 'வயிறு', 'குமட்டல்', 'வாந்தி', 'வயிற்றுப்போக்கு', 'அஜீரணம்', 'வயிறு உப்பசம்'
+        ],
         followUps: {
             en: ["Where exactly is the pain — upper, lower, left, or right side?", "Any vomiting or loose stools? How many times?", "Did you eat anything unusual recently? Any change in diet?"],
             ta: ["வலி எங்கே இருக்கிறது — மேல்பகுதி, கீழ்பகுதி, இடது அல்லது வலது?", "வாந்தி அல்லது வயிற்றுப்போக்கு உள்ளதா? எத்தனை முறை?", "சமீபத்தில் ஏதாவது புதியதாக சாப்பிட்டீர்களா?"],
@@ -160,7 +180,11 @@ export const KB = [
     // DIABETES
     {
         id: 'diabetes',
-        keywords: ['diabetes', 'sugar', 'blood sugar', 'insulin', 'thirsty', 'frequent urination', 'diabetic', 'நீரிழிவு', 'சர்க்கரை', 'அடிக்கடி சிறுநீர்', 'தாகம்'],
+        keywords: [
+            'diabetes', 'sugar', 'blood sugar', 'insulin', 'thirsty', 'frequent urination', 'diabetic',
+            'high sugar', 'low sugar', 'hypoglycemia', 'hyperglycemia', 'glucose',
+            'நீரிழிவு', 'சர்க்கரை', 'அடிக்கடி சிறுநீர்', 'தாகம்', 'இரத்த சர்க்கரை'
+        ],
         followUps: {
             en: ["Are you already diagnosed with diabetes? If yes, are you on medication?", "What was your last blood sugar reading?", "Any symptoms like blurred vision, tingling feet, or slow wound healing?"],
             ta: ["நீங்கள் ஏற்கனவே நீரிழிவு நோயால் கண்டறியப்பட்டீர்களா? மருந்து எடுக்கிறீர்களா?", "கடைசியாக இரத்த சர்க்கரை அளவு என்ன?", "மங்கிய பார்வை, கால்களில் கூச்சம், அல்லது காயம் நிவாரணம் கஷ்டமா?"],
@@ -186,7 +210,11 @@ export const KB = [
     // BODY PAIN
     {
         id: 'body_pain',
-        keywords: ['body pain', 'muscle pain', 'joint pain', 'ache', 'backache', 'back pain', 'bone', 'arthritis', 'உடல்வலி', 'மூட்டு வலி', 'முதுகுவலி', 'எலும்பு', 'தசைவலி'],
+        keywords: [
+            'body pain', 'muscle pain', 'joint pain', 'ache', 'backache', 'back pain', 'bone', 'arthritis',
+            'feeling sore', 'body ache', 'limb pain', 'stiffness', 'neck pain',
+            'உடல்வலி', 'மூட்டு வலி', 'முதுகுவலி', 'எலும்பு', 'தசைவலி', 'வலி', 'உடல் சோர்வு'
+        ],
         followUps: {
             en: ["Which part of your body is most painful?", "Is the pain sharp, dull ache, or stiffness?", "Does it get worse in the morning, after activity, or at rest?"],
             ta: ["உடலின் எந்த பகுதியில் அதிகமாக வலிக்கிறது?", "வலி கூர்மையானதா, மழுங்கியதா, அல்லது இறுக்கமா?", "காலையில், செயல்பாட்டிற்கு பிறகு, அல்லது ஓய்வில் மோசமாகிறதா?"],
@@ -212,7 +240,11 @@ export const KB = [
     // SKIN
     {
         id: 'skin',
-        keywords: ['rash', 'itching', 'itch', 'skin', 'allergy', 'hives', 'red spots', 'pimples', 'acne', 'eczema', 'தடிப்பு', 'அரிப்பு', 'தோல்', 'ஒவ்வாமை', 'முகப்பரு'],
+        keywords: [
+            'rash', 'itching', 'itch', 'skin', 'allergy', 'hives', 'red spots', 'pimples', 'acne', 'eczema',
+            'dry skin', 'skin irritation', 'blister', 'boil', 'bump',
+            'தடிப்பு', 'அரிப்பு', 'தோல்', 'ஒவ்வாமை', 'முகப்பரு', 'சரங்கு', 'முடி உதிர்தல்'
+        ],
         followUps: {
             en: ["Where is the rash or itching located?", "Is it spreading or staying in one place?", "Did you use any new soap, food, or medicine recently?"],
             ta: ["தடிப்பு அல்லது அரிப்பு எங்கே உள்ளது?", "அது பரவுகிறதா அல்லது ஒரே இடத்தில் இருக்கிறதா?", "சமீபத்தில் புதிய சோப்பு, உணவு, அல்லது மருந்து பயன்படுத்தினீர்களா?"],
@@ -238,7 +270,11 @@ export const KB = [
     // BREATHING
     {
         id: 'breathing',
-        keywords: ['breathless', 'breathing', 'shortness of breath', 'asthma', 'wheeze', 'wheezing', 'suffocate', 'oxygen', 'சுவாசிக்க', 'ஆஸ்துமா', 'மூச்சு திணறல்', 'மூச்சு'],
+        keywords: [
+            'breathless', 'breathing', 'shortness of breath', 'asthma', 'wheeze', 'wheezing', 'suffocate', 'oxygen',
+            'cant breathe', 'gasping', 'short of breath',
+            'சுவாசிக்க', 'ஆஸ்துமா', 'மூச்சு திணறல்', 'மூச்சு', 'மூச்சு விட கஷ்டம்'
+        ],
         followUps: {
             en: ["Is the breathlessness constant or does it come in attacks?", "Do you have a history of asthma or heart disease?", "Does it get worse on exertion or at rest?"],
             ta: ["மூச்சு திணறல் தொடர்ந்து இருக்கிறதா அல்லது தாக்குதல்களாக வருகிறதா?", "ஆஸ்துமா அல்லது இதய நோய் வரலாறு உள்ளதா?", "செயல்பாட்டில் மோசமாகிறதா அல்லது ஓய்வில்?"],
@@ -264,7 +300,11 @@ export const KB = [
     // EYE
     {
         id: 'eye',
-        keywords: ['eye pain', 'red eye', 'itchy eye', 'blurred vision', 'watery eye', 'conjunctivitis', 'கண் வலி', 'சிவந்த கண்', 'கண் தொற்று', 'மங்கிய பார்வை', 'கண் அரிப்பு'],
+        keywords: [
+            'eye pain', 'red eye', 'itchy eye', 'blurred vision', 'watery eye', 'conjunctivitis',
+            'eye irritation', 'sore eye', 'pink eye', 'burning eye',
+            'கண் வலி', 'சிவந்த கண்', 'கண் தொற்று', 'மங்கிய பார்வை', 'கண் அரிப்பு', 'கண் எரிச்சல்'
+        ],
         followUps: {
             en: ["Is one eye or both eyes affected?", "Any discharge (pus, watery, or sticky)?", "Did you get anything in your eye?"],
             ta: ["ஒரு கண்ணா அல்லது இரண்டு கண்களுமா பாதிக்கப்பட்டிருக்கிறது?", "கண்ணிலிருந்து திரவம் (சீழ், தண்ணீர், ஒட்டும் திரவம்) வருகிறதா?", "கண்ணில் ஏதாவது விழுந்ததா?"],
@@ -290,7 +330,11 @@ export const KB = [
     // MENTAL HEALTH
     {
         id: 'mental',
-        keywords: ['stress', 'anxiety', 'depression', 'sad', 'mental', 'panic', 'sleep', 'insomnia', 'worry', 'மன அழுத்தம்', 'கவலை', 'மனசோர்வு', 'தூக்கமின்மை', 'பதட்டம்'],
+        keywords: [
+            'stress', 'anxiety', 'depression', 'sad', 'mental', 'panic', 'sleep', 'insomnia', 'worry',
+            'lonely', 'hopeless', 'overwhelmed', 'fear', 'nervous',
+            'மன அழுத்தம்', 'கவலை', 'மனசோர்வு', 'தூக்கமின்மை', 'பதட்டம்', 'பயம்', 'கஷ்டமா இருக்கு'
+        ],
         followUps: {
             en: ["How long have you been feeling this way?", "Is it affecting your sleep, appetite, or daily activities?", "Have you experienced any thoughts of harming yourself?"],
             ta: ["எத்தனை நாட்களாக இப்படி உணர்கிறீர்கள்?", "தூக்கம், பசி, அல்லது தினசரி நடவடிக்கைகளை பாதிக்கிறதா?", "உங்களை நீங்களே தீங்கு செய்து கொள்ள எண்ணங்கள் வருகிறதா?"],
